@@ -1,14 +1,69 @@
-generator client{
+generator client {
     provider = "prisma-client-js"
 }
 
-datasource db{
+datasource db {
     provider = "mysql"
-    url = env("DATABASE_URL")
+    url      = env("DATABASE_URL")
 }
 
-model Student_Info{
-    id Int @id @default(autoincrement())
-    name String
+model Student_Info {
+    id       String @id @default(uuid())
+    name     String
     lastName String
+    class    Class  @relation(fields: [classId], references: [id])
+    classId  Int    @default(0)
+}
+
+model Class {
+    id           Int            @id @default(autoincrement())
+    name         String
+    Student_Info Student_Info[]
+}
+
+model User {
+    id            String @id @default(uuid()) //---- uuid() automatically generates unique id for your
+    age           Int
+    name          String
+    email         String @unique
+    role          Role   @default(BASIC)
+    writtenPosts  Post[] @relation("WrittenPosts")
+    favoritePosts Post[] @relation("FavoritePosts")
+
+    userPreference   UserPreference? @relation(fields: [userPreferenceId], references: [id])
+    userPreferenceId String?         @unique
+
+    @@unique([age, name])
+    @@index([email])
+}
+
+model UserPreference {
+    id           String  @id @default(uuid()) //---- uuid() automatically generates unique id for your
+    emailUpdates Boolean
+    user         User?
+}
+
+model Post {
+    id            String     @id @default(uuid())
+    title         String
+    averageString Float
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
+    author        User       @relation("WrittenPosts", fields: [authorId], references: [id])
+    authorId      String
+    favoritedBy   User       @relation("FavoritePosts", fields: [favoriteById], references: [id])
+    favoriteById  String
+    categories    Category[]
+}
+
+model Category {
+    id   String @id @default(uuid())
+    name String @unique
+    post Post[]
+}
+
+enum Role {
+    BASIC
+    EDITOR
+    ADMIN
 }

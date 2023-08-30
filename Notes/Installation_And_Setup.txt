@@ -1,0 +1,41 @@
+Prisma Documetation
+
+=> Install -  npm install prisma @prisma/client   
+=> After then Prisma Folder Structure.
+	- Basically for configuration you we need create Prisma folder at root directory
+	- In that folder create schema.prisma file
+	- This file contains your connection code and all models code
+	- Connection Code - generator client{
+				   	provider = "prisma-client-js"
+				}
+
+			   datasource db{
+  				  provider = "mysql"
+  				  url = env("DATABASE_URL")
+			       }
+
+	- If you want to create table then you need to create Model in same file i.e., schema.prisma
+	
+		model Profile {
+		  id     Int     @id @default(autoincrement())
+		  bio    String?
+		  userId Int   
+		}
+=> After entering your model code then wee need to fire one command for migrate data from ORM to MySQL
+	- npx prisma migrate dev --name init  
+	- This creates tables according to your given model.
+	- After applying this command in our Prisma folder one migration folder creates and in that folder all your transactions are created.
+
+=> When we have to use this model/table then just import PrismaClient from PrismaClient and create object of PrismaClient
+	- const {PrismaClient} =require("@prisma/client")
+	  const prisma=new PrismaClient()
+
+=> And that's it. Now you will able to access your models through this prisma like this
+	- const response = await prisma.student_Info.create({
+            data:{
+                name:name,
+                lastName:lastName
+            } 
+        })
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------

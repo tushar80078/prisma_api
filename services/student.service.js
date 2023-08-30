@@ -11,7 +11,6 @@ const createStudent=async(studentData)=>{
             } 
         })
         return response;
-  
 }
 
 const deleteStudentById=async(studentId)=>{

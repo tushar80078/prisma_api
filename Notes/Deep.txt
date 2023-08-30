@@ -1,0 +1,18 @@
+
+=> Initialize Database Directly By Using Command Line
+	- npx init --datasource-provider mysql
+	- It directly creates folder for you in root folder named prisma
+	- This folder contains the schema.prisma file contains all config.
+
+=> To migrate database(Means replicate changes whatever may be you done in prisma file to mysql we need to migrate database)
+	- npx migrate dev --name init
+	- --name you can put your own name for migration
+
+=> To make any field in the model as optional then put ? after that field
+	- model User{
+		id Int @id @default(autoIncrement())
+		name String
+		lastName String?
+		}
+
+=> 
